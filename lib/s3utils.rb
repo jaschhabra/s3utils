@@ -89,13 +89,15 @@ module S3Utils
                 opt =  ENV["HTTPS_PROXY"] ? {:proxy_uri => ENV["HTTPS_PROXY"]} : {}
                 AWS.config({ :access_key_id => access_key,
                              :secret_access_key => secret_key}.merge opt)
-                with_error_handling do
+                begin
                   s3 = AWS::S3.new
                   #test connection by checking for 1 bucket name
                   s3.buckets.each do |bucket|
                     bucket.name
                     break
                   end
+                rescue Exception => e
+                  abort "Error: " + e.message
                 end
                 s3
               end
