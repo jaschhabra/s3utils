@@ -24,12 +24,21 @@ module S3Utils
     end
 
 
-    desc "deletebucket name", "deletes a bucket"
+    desc "deletekey bucket:key", "deletes a key in the given bucket"
+    def deletekey(bucket_key)
+      with_error_handling do
+        abort "Error: incorrect bucket:key format" unless bucket_key =~ /(.+):(.+)/
+        s3.buckets[$1].objects[$2].delete
+      end
+    end
+
+    desc "deletebucket name", "deletes a bucket, if it is empty"
     def deletebucket(name)
       with_error_handling do
         s3.buckets[name].delete
       end
     end
+
 
     desc "list bucket:prefix", "list the keys of a bucket"
     def list(bucket_prefix)
@@ -45,6 +54,15 @@ module S3Utils
       end
     end
 
+    desc "get_timestamp bucket:key", "get the last modified integer timestamp for the key from the bucket"
+    def get_timestamp(bucket_key)
+      with_error_handling do
+        abort "Error: incorrect bucket:key format" unless bucket_key =~ /(.+):(.+)/
+        o = s3.buckets[$1].objects[$2]
+        puts o.last_modified.to_i
+      end
+    end
+
     desc "get bucket:key file", "get the file for the key from the bucket"
     def get(bucket_key, file)
       with_error_handling do
@@ -53,6 +71,8 @@ module S3Utils
         File.open(file, "w"){|f| f.write(o.read)}
       end
     end
+
+
 
     desc "put bucket:key file", "puts a file for the key in the bucket"
     def put(bucket_key, file)
