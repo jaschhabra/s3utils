@@ -26,7 +26,7 @@ describe "S3cmd"  do
       $?.success?.should be_true
     end
 
-    describe "get_timestamp" do
+    describe "gettimestamp" do
       it "should return integer timestamp" do
         o = `#{@s3cmd} get_timestamp #{@bucket_name}:#{@key_name}`
         $?.success?.should be_true

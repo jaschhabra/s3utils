@@ -54,7 +54,7 @@ module S3Utils
       end
     end
 
-    desc "get_timestamp bucket:key", "get the last modified integer timestamp for the key from the bucket"
+    desc "gettimestamp bucket:key", "get the last modified integer timestamp for the key from the bucket"
     def get_timestamp(bucket_key)
       with_error_handling do
         abort "Error: incorrect bucket:key format" unless bucket_key =~ /(.+):(.+)/
