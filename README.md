@@ -18,9 +18,9 @@ given:
     look in the file. The file should have at least two lines:·
 
 
-AWSAccessKeyId=
+AWSAccessKeyId=A34554D...
 
-AWSSecretKey=
+AWSSecretKey=ACF4545666...
 
     
  2. Environment Variables:
