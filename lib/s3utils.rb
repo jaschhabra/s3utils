@@ -32,9 +32,16 @@ module S3Utils
       end
     end
 
-    desc "deletebucket name", "deletes a bucket, if it is empty"
+    desc "deletebucket name [--force] ", "deletes a bucket. --force will delete a non-empty bucket"
+    method_options :force => false
     def deletebucket(name)
       with_error_handling do
+        if options.force?
+          objects =  s3.buckets[name].objects
+          objects.each do |o|
+            o.delete
+          end
+        end
         s3.buckets[name].delete
       end
     end

@@ -24,6 +24,9 @@ describe "S3cmd"  do
       @test_file = File.expand_path(File.dirname(__FILE__)) + "/data/test.txt"
       `#{@s3cmd} put #{@bucket_name}:#{@key_name} #{@test_file}`
       $?.success?.should be_true
+      # Create another key in bucket to be able to test non-empty deletes
+      `#{@s3cmd} put #{@bucket_name}:#{@key_name}2 #{@test_file}`
+      $?.success?.should be_true
     end
 
     describe "gettimestamp" do
@@ -59,7 +62,9 @@ describe "S3cmd"  do
 
   end
   after :all do
-    `#{@s3cmd} deletebucket #{@bucket_name}`
+    # Since one key is left this will try to delet a non-empty bucket
+    puts "#{@s3cmd} deletebucket  #{@bucket_name}  --force"
+    `#{@s3cmd} deletebucket  #{@bucket_name}  --force`
     abort "Could not create delete test bucket #{@bucket_name}" unless $?.success?
   end
 end
