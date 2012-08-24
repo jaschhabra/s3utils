@@ -55,6 +55,22 @@ describe "S3cmd"  do
       end
     end
 
+    describe "deletekeys with prefix" do
+      it "should delete the keys with prefix successfully" do
+        prefix = "s3testfiles"
+      `#{@s3cmd} put #{@bucket_name}:#{prefix}1 #{@test_file}`
+      $?.success?.should be_true
+      `#{@s3cmd} put #{@bucket_name}:#{prefix}2 #{@test_file}`
+      $?.success?.should be_true
+      `#{@s3cmd} put #{@bucket_name}:#{prefix}3 #{@test_file}`
+      $?.success?.should be_true
+
+      `#{@s3cmd} deletekey #{@bucket_name}:#{prefix} --prefix`
+      $?.success?.should be_true
+
+      end
+    end
+
     after :all do
       `#{@s3cmd} deletekey #{@bucket_name}:#{@key_name}`
       $?.success?.should be_true
