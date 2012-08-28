@@ -1,5 +1,6 @@
 s3utils
 =======
+[![Code Climate](https://codeclimate.com/badge.png)](https://codeclimate.com/github/jasmeetc/s3utils)
 
 Ruby s3 utils that use AWS SDK to work easily with IAM roles.
 
