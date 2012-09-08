@@ -6,9 +6,11 @@
 # See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
 
 require 'rubygems'
+
 require 'bundler/setup'
 
 require 's3utils' # and any other gems you need
+
 
 RSpec.configure do |config|
   config.treat_symbols_as_metadata_keys_with_true_values = true

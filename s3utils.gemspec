@@ -10,14 +10,13 @@ Gem::Specification.new do |s|
   s.summary     = %q{Simple tool for working with S3. Similar to s3cmd that comes with s3sync}
   s.description = <<-DESC
 Provides a s3cmd binary to perform simple commands on buckets and objects in s3. 
-See https://github.com/jasmeetc/s3utils for more.
+See <a href="https://github.com/jasmeetc/s3utils"> Github S3utils page </a> for more. 
+Also, feel free to leave an issue on the github page, if you run into anything
 DESC
-
-  s.required_ruby_version = ">= 1.8.7"
 
   s.files       = Dir["bin/*", "lib/**/*"] + ["LICENSE", "README.md"]
   s.executables = ["s3cmd"]
 
   s.add_dependency "aws-sdk", "~> 1.6.0"
-  s.add_dependency "thor", "~> 0.15.4"
+  s.add_dependency "thor", "~> 0.16.0"
 end

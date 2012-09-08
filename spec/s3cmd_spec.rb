@@ -79,7 +79,6 @@ describe "S3cmd"  do
   end
   after :all do
     # Since one key is left this will try to delet a non-empty bucket
-    puts "#{@s3cmd} deletebucket  #{@bucket_name}  --force"
     `#{@s3cmd} deletebucket  #{@bucket_name}  --force`
     abort "Could not create delete test bucket #{@bucket_name}" unless $?.success?
   end
