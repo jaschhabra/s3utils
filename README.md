@@ -50,3 +50,7 @@ Commands available after install
       s3cmd list bucket:prefix                # list the keys of a bucket
       s3cmd listbuckets                       # lists all of the buckets in your account
       s3cmd put bucket:key file               # puts a file for the key in the bucket
+
+
+
+Please Feel free to leave any issue you find
