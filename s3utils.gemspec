@@ -17,6 +17,6 @@ DESC
   s.files       = Dir["bin/*", "lib/**/*"] + ["LICENSE", "README.md"]
   s.executables = ["s3cmd"]
 
-  s.add_dependency "aws-sdk", "~> 1.6.0"
-  s.add_dependency "thor", "~> 0.16.0"
+  s.add_dependency "aws-sdk", "~> 1.6"
+  s.add_dependency "thor", "~>0.14"
 end
