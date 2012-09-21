@@ -24,8 +24,8 @@ module S3Utils
     end
 
 
-    desc "deletekey bucket:key [--prefix]", "deletes a key in the given bucket. --prefix will delete all keys in the bucket with the prefix"
-    method_options :prefix => false
+    desc "deletekey bucket:key", "deletes a key in the given bucket."
+    method_option :prefix, :default => false, :desc => "delete all keys in a bucket with the prefix"
     def deletekey(bucket_key)
       with_error_handling do
         abort "Error: incorrect bucket:key format" unless bucket_key =~ /(.+):(.+)/
@@ -42,8 +42,8 @@ module S3Utils
 
 
 
-    desc "deletebucket name [--force] ", "deletes a bucket. --force will delete a non-empty bucket"
-    method_options :force => false
+    desc "deletebucket name ", "deletes a bucket."
+    method_option :force, :default => false, :desc => "force delete a bucket after deleting all the keys in the bucket"
     def deletebucket(name)
       with_error_handling do
         if options.force?
