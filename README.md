@@ -49,7 +49,9 @@ Commands available after install
       s3cmd help [TASK]                       # Describe available tasks or one specific task
       s3cmd list bucket:prefix                # list the keys of a bucket
       s3cmd listbuckets                       # lists all of the buckets in your account
+      s3cmd move bucket:key bucket:key        # moves a file or multiple files from one bucket to another
       s3cmd put bucket:key file               # puts a file for the key in the bucket
+      s3cmd version                           #  gives the version of s3utils gem
 
 
 
