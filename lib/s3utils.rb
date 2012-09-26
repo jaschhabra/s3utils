@@ -6,6 +6,11 @@ module S3Utils
   require "s3utils/version"
 
   class Main < Thor
+
+    desc "version", " gives the version of s3utils gem"
+    def version
+      puts S3Utils::VERSION
+    end
     desc "listbuckets", "lists all of the buckets in your account"
     def listbuckets
       with_error_handling do
@@ -89,13 +94,24 @@ module S3Utils
       end
     end
 
-
-
     desc "put bucket:key file", "puts a file for the key in the bucket"
     def put(bucket_key, file)
       with_error_handling do
         abort "Error: incorrect bucket:key format" unless bucket_key =~ /(.+):(.+)/
         File.open(file, "r") { |f| s3.buckets[$1].objects.create($2, :data => f.read)}
+      end
+    end
+
+    desc "move bucket:key bucket:key", "moves a file or multiple files from one bucket to another"
+    def move(from, to)
+      with_error_handling do 
+        abort "Error: incorrect bucket:key format" unless from =~ /(.+):(.+)/ &&  to =~ /(.+):(.+)/
+        from =~ /(.+):(.+)/
+        o_from = s3.buckets[$1].objects[$2]
+        raise "Object #{from} does not exist" unless o_from.exists?
+
+        to =~ /(.+):(.+)/
+        o_to = s3.buckets[$1].objects.create($2, :data => o_from.read)
       end
     end
 

@@ -1,6 +1,6 @@
 require 'spec_helper'
 describe "S3cmd"  do
-  before :all do
+  before :each do
     @s3cmd = File.expand_path(File.dirname(__FILE__)) + "/../bin/s3cmd"
     time = Time.now.to_i
     @bucket_name = "s3cmd_test_bucket_#{time}"
@@ -17,7 +17,7 @@ describe "S3cmd"  do
   end
 
   describe "key/file commands" do
-    before :all do
+    before :each do
       time = Time.now.to_i
       @prefix = "s3cmd_test_file"
       @key_name = "#{@prefix}_#{time}"
@@ -58,26 +58,39 @@ describe "S3cmd"  do
     describe "deletekeys with prefix" do
       it "should delete the keys with prefix successfully" do
         prefix = "s3testfiles"
-      `#{@s3cmd} put #{@bucket_name}:#{prefix}1 #{@test_file}`
-      $?.success?.should be_true
-      `#{@s3cmd} put #{@bucket_name}:#{prefix}2 #{@test_file}`
-      $?.success?.should be_true
-      `#{@s3cmd} put #{@bucket_name}:#{prefix}3 #{@test_file}`
-      $?.success?.should be_true
+        `#{@s3cmd} put #{@bucket_name}:#{prefix}1 #{@test_file}`
+        $?.success?.should be_true
+        `#{@s3cmd} put #{@bucket_name}:#{prefix}2 #{@test_file}`
+        $?.success?.should be_true
+        `#{@s3cmd} put #{@bucket_name}:#{prefix}3 #{@test_file}`
+        $?.success?.should be_true
 
-      `#{@s3cmd} deletekey #{@bucket_name}:#{prefix} --prefix`
-      $?.success?.should be_true
+        `#{@s3cmd} deletekey #{@bucket_name}:#{prefix} --prefix`
+        $?.success?.should be_true
 
       end
     end
 
-    after :all do
-      `#{@s3cmd} deletekey #{@bucket_name}:#{@key_name}`
+    describe "move file from one bucket to another" do
+      it "should not move non-existent file successfully" do
+       `#{@s3cmd} move #{@bucket_name}:junkkeyname #{@bucket_name}:#{@key_name}3`
+       $?.success?.should_not be_true
+      end
+      it "should move file successfully" do
+        `#{@s3cmd} move #{@bucket_name}:#{@key_name} #{@bucket_name}:#{@key_name}3`
+        o = `#{@s3cmd} list #{@bucket_name}:#{@prefix}`
+        $?.success?.should be_true
+        o.should include("#{@key_name}3")
+      end
+    end
+
+    after :each do
+      `#{@s3cmd} deletekey #{@bucket_name}:#{@key_name} --prefix`
       $?.success?.should be_true
     end
 
   end
-  after :all do
+  after :each do
     # Since one key is left this will try to delet a non-empty bucket
     `#{@s3cmd} deletebucket  #{@bucket_name}  --force`
     abort "Could not create delete test bucket #{@bucket_name}" unless $?.success?
