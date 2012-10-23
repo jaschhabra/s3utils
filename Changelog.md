@@ -1,3 +1,5 @@
+# 0.1.0
+* Bumping up the version number
 # 0.0.5
 * Added basic version of move command
 * Improved tests
