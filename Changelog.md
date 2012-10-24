@@ -1,3 +1,6 @@
+# 0.2.0
+* Fixed move to actually delete the file it is moving from
+* Added copy command to copy from one bucket to another
 # 0.1.0
 * Bumping up the version number
 # 0.0.5

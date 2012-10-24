@@ -102,7 +102,21 @@ module S3Utils
       end
     end
 
-    desc "move bucket:key bucket:key", "moves a file or multiple files from one bucket to another"
+    desc "copy bucket:key bucket:key", "copy a file from one bucket:key to another bucket:key"
+    def copy(from, to)
+      with_error_handling do 
+        abort "Error: incorrect bucket:key format" unless from =~ /(.+):(.+)/ &&  to =~ /(.+):(.+)/
+        from =~ /(.+):(.+)/
+        o_from = s3.buckets[$1].objects[$2]
+        raise "Object #{from} does not exist" unless o_from.exists?
+
+        to =~ /(.+):(.+)/
+        o_to = s3.buckets[$1].objects.create($2, :data => o_from.read)
+      end
+    end
+
+
+    desc "move bucket:key bucket:key", "moves a file from one bucket:key to another bucket:key"
     def move(from, to)
       with_error_handling do 
         abort "Error: incorrect bucket:key format" unless from =~ /(.+):(.+)/ &&  to =~ /(.+):(.+)/
@@ -112,6 +126,7 @@ module S3Utils
 
         to =~ /(.+):(.+)/
         o_to = s3.buckets[$1].objects.create($2, :data => o_from.read)
+        o_from.delete
       end
     end
 
