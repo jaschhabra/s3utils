@@ -1,3 +1,5 @@
+# 0.2.1
+* Cleaned up code and fixed tests
 # 0.2.0
 * Fixed move to actually delete the file it is moving from
 * Added copy command to copy from one bucket to another
