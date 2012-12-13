@@ -138,35 +138,34 @@ module S3Utils
         abort "Error: " + e.message
       end
     end
+    def test_aws_config(s3)
+      begin
+        #test connection by checking for 1 bucket name
+        s3.buckets.each do |bucket|
+          break
+        end
+      rescue Exception => e
+        abort "Error: " + e.message
+      end
+
+    end
     def s3
       @s3 ||= begin
-                access_key, secret_key = nil, nil
+                aws_key_opts = {}
 
                 if ENV["AWS_CREDENTIAL_FILE"]
                   File.open(ENV["AWS_CREDENTIAL_FILE"]) do |file|
                     file.lines.each do |line|
-                      access_key = $1 if line =~ /^AWSAccessKeyId=(.*)$/
-                      secret_key = $1 if line =~ /^AWSSecretKey=(.*)$/
+                      aws_key_opts[:access_key_id] = $1 if line =~ /^AWSAccessKeyId=(.*)$/
+                      aws_key_opts[:secret_access_key] = $1 if line =~ /^AWSSecretKey=(.*)$/
                     end
                   end
-                elsif ENV["AWS_ACCESS_KEY"] || ENV["AWS_SECRET_KEY"]
-                  access_key = ENV["AWS_ACCESS_KEY"]
-                  secret_key = ENV["AWS_SECRET_KEY"]
                 end
 
                 opt =  ENV["HTTPS_PROXY"] ? {:proxy_uri => ENV["HTTPS_PROXY"]} : {}
-                AWS.config({ :access_key_id => access_key,
-                             :secret_access_key => secret_key}.merge opt)
-                begin
-                  s3 = AWS::S3.new
-                  #test connection by checking for 1 bucket name
-                  s3.buckets.each do |bucket|
-                    bucket.name
-                    break
-                  end
-                rescue Exception => e
-                  abort "Error: " + e.message
-                end
+                AWS.config(aws_key_opts.merge opt)
+                s3 = AWS::S3.new
+                test_aws_config(s3)
                 s3
               end
     end
